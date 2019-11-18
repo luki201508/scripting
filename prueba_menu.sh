@@ -31,4 +31,5 @@ show_menus() {
 	echo "-----------------"
 	echo "1. blabla"
 	echo "2. popo"
+	echo "3. exit"
 }
