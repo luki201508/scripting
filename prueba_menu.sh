@@ -2,7 +2,7 @@
 # Demo-menu shell script
 ## --------------------
 # Variables
-# ---------------
+## --------------------
 EDITOR=nano
 PASSWD=/etc/passwd
 
