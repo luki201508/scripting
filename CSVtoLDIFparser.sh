@@ -58,22 +58,27 @@ main() {
 
 # input "title" "message" "var_name"
 input() {
+        # this 'variable' is for putting the default value to the value of the variable
+        variable=$3
         dialog  --clear \
                 --title "[$1]" \
                 --backtitle "$BACKTITLE" \
                 --ok-label "Aceptar" \
                 --cancel-label "Cancelar" \
-                --inputbox "$2" 8 60 \
+                --inputbox "$2" 8 60 "${!variable}" \
                 2> /tmp/csv-ldif-parser.tmp.$$
-
+        exit_status=$?
+        if [ $exit_status -eq 0 ]
+        then
         case $3 in
                 admin_name)
-                        admin_name=`cat /tmp/csv-ldif-parser.tmp.$$` ;;
+                        admin_name=`cat /tmp/csv-ldif-parser.tmp.$$`  ;;
                 domain_name)
                         domain_name=`cat /tmp/csv-ldif-parser.tmp.$$` ;;
                 domain_extension)
-                        domain_extension=`cat /tmp/csv-ldif-parser.tmp.$$` ;;
+                        domain_extension=`cat /tmp/csv-ldif-parser.tmp.$$`;;
         esac
+        fi
 }
 
 # select file in system
@@ -81,7 +86,9 @@ csv_input() {
         dialog  --clear \
                 --title "Import CSV" \
                 --backtitle "$BACKTITLE" \
-                --fselect $HOME 14 48 \
+                --ok-label "Aceptar" \
+                --cancel--label "Cancelar" \
+                --fselect $HOME/ 14 48 \
                 2> /tmp/csv-ldif-parser.tmp.$$
         csv_path=`cat /tmp/csv-ldif-parser.tmp.$$`
 }
@@ -150,6 +157,8 @@ script_info_error() {
                 --backtitle "$BACKTITLE" \
                 --msgbox "Falta información: $1" 7 40
 }
+
+
 
 #################################################################
 ######                      MAIN LOOP                     #######
