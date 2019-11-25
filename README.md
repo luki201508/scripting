@@ -12,12 +12,18 @@ El programa pedirá al usuario los siguientes parámetros:
 Para poder ejecutar correctamente este script, se necesitará lo siguiente:
   - Un ordenador con terminal ***Linux***
   - Un servidor ***LDAP*** isntalado y correctamente funcionando
-  - Modulo de dialog `apt-get install dialog`
+  - Modulo de dialog ```console foo@bar:~$ apt-get install dialog```
 
 ### Instalación 
 Primero nos descargamos el script. Este repositorio trae un *.csv* de prueba para poder realizar tests.
-`git clone https://github.com/luki201508/scripting.git`
+```console
+foo@bar:~$ git clone https://github.com/luki201508/scripting.git
+```
 Se nos descargará una carpeta *scripting*.
-`cd scripting`
+```console
+foo@bar:~$ cd scripting
+```
 Finalmente ejecutaremos el script. Da igual como se haga, aquí te muestro una manera de ejecutarlo:
-`bash CSVtoLDIFparser.sh`
+```console
+foo@bar:~$ bash CSVtoLDIFparser.sh
+```
