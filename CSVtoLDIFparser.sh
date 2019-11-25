@@ -8,8 +8,9 @@ Es aconsejable ir en orden.
 Elige una opción.
 END
 )
+default_page=Nombre
 
-# undefined variable
+# not defined variable
 let admin_name
 let domain_name
 let domain_extension
@@ -43,6 +44,7 @@ main() {
                 --backtitle "$BACKTITLE" \
                 --ok-label "Aceptar" \
                 --cancel-label "Cancelar" \
+		--default-item $default_page \
                 --menu "$MSGBOX" 20 0 20 \
                 Nombre "Indica el nombre del admin OpenLDAP" \
                 Servidor "Indica el nombre del servidor" \
@@ -134,10 +136,19 @@ script_info() {
                         if [ $script_option -eq 0 ]
                         then
                                 csv_to_ldif
+				echo "[Primera entrada del ldif]" >> /tmp/csv-ldif-parser.tmp.$$
+				head -13 $HOME/add_users.ldif >> /tmp/csv-ldif-parser.tmp.$$
+				printf "\n" >> /tmp/csv-ldif-parser.tmp.$$
+				echo "[Segunda entrada del ldif]" >> /tmp/csv-ldif-parser.tmp.$$
+				tail -13 $HOME/add_users.ldif >> /tmp/csv-ldif-parser.tmp.$$
+				printf "\n" >> /tmp/csv-ldif-parser.tmp.$$
+				echo "[Numero de entradas totales]" >> /tmp/csv-ldif-parser.tmp.$$
+				grep -c ^$ $HOME/add_users.ldif >> /tmp/csv-ldif-parser.tmp.$$
 				dialog  --clear \
 					--title "[Script content]" \
 					--backtitle "$BACKTITLE" \
-					--textbox $HOME/add_users.ldif 20 60
+					--exit-label "Atrás" \
+					--textbox /tmp/csv-ldif-parser.tmp.$$ 40 70
                         fi
                 fi
         fi
@@ -163,13 +174,13 @@ script_info_error() {
 
 csv_to_ldif() {
 	#ou exists
-	while IFS=, read -r uidNumber description name
+	while IFS=, read -r uidNumber description name name_id
 	do
-		echo "dn: uid=$name,ou=prueba,dc=$domain_name,dc=$domain_extension" >> $HOME/add_users.ldif
+		echo dn: uid=$name,ou=prueba,dc=$domain_name,dc=$domain_extension >> $HOME/add_users.ldif
 		echo uid: $name >> $HOME/add_users.ldif
 		echo cn: $name >> $HOME/add_users.ldif
 		echo givenName: $description >> $HOME/add_users.ldif
-		echo sn: $name >> $HOME/add_users.ldif
+		echo sn: $name-$uidNumber >> $HOME/add_users.ldif
 		echo objectClass: inetOrgPerson >> $HOME/add_users.ldif
 		echo objectClass: posixAccount >> $HOME/add_users.ldif
 		echo objectClass: top >> $HOME/add_users.ldif
@@ -209,15 +220,20 @@ while true; do
         case $main_val in
                 0) exit_program "terminated" ;;
 
-                Nombre) input "Admin OpenLDAP" "Pon el nombre del administrador del dominio:" "admin_name" ;;
+                Nombre) input "Admin OpenLDAP" "Pon el nombre del administrador del dominio:" "admin_name"
+			default_page=Nombre ;;
 
-                Servidor) input "Dominio" "Ponga el nombre del dominio:" "domain_name" ;;
+                Servidor) input "Dominio" "Ponga el nombre del dominio:" "domain_name"
+			default_page=Servidor ;;
 
-                Extension) input "Dominio" "Ponga la extensión del dominio:" "domain_extension" ;;
+                Extension) input "Dominio" "Ponga la extensión del dominio:" "domain_extension"
+			default_page=Extension ;;
 
-                OrigenCSV) csv_input ;;
+                OrigenCSV) csv_input
+			default_page=OrigenCSV ;;
 
-                Script) script_info ;;
+                Script) script_info
+			default_page=Script ;;
 
                 Salir) exit_program "terminated" ;;
         esac
