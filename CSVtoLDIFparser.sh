@@ -18,7 +18,7 @@ let csv_path
 # Exit program function
 # Abort or terminated
 exit_program() {
-        rm -f /tmp/csv-ldif-parser.tmp.$$
+        rm -f /tmp/csv-ldif-parser.tmp.*
         clear
         echo "Program $1"
         if [ "$1" == "aborted" ]
@@ -88,7 +88,7 @@ csv_input() {
 		--backtitle "$BACKTITLE" \
 		--ok-label "Aceptar" \
 		--cancel-label "Cancelar" \
-		--fselect $HOME/ 14 48
+		--fselect $HOME/ 14 48 \
                 2> /tmp/csv-ldif-parser.tmp.$$
         csv_path=`cat /tmp/csv-ldif-parser.tmp.$$`
 }
@@ -156,6 +156,23 @@ script_info_error() {
                 --title "[Script info]" \
                 --backtitle "$BACKTITLE" \
                 --msgbox "Falta información: $1" 7 40
+}
+
+
+csv_to_ldif() {
+	
+	while IFS=, read -r uid description name
+	do
+		echo
+}
+
+ou_exists() {
+	ldapsearch -H ldap://$domain_name.$domain_extension \
+	-x -LLL -b "dc=$domain_name,dc=$domain_extension" "(ou=people)" dn \
+	>> /tmp/csv-ldif-parser.tmp.$$
+	ou_content=`cat /tmp/csv-ldif-parser.tmp.$$`
+	if [ -z "$ou_content" ]
+	then
 }
 
 
