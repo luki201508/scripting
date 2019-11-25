@@ -83,12 +83,12 @@ input() {
 
 # select file in system
 csv_input() {
-        dialog  --clear \
-                --title "Import CSV" \
-                --backtitle "$BACKTITLE" \
-                --ok-label "Aceptar" \
-                --cancel--label "Cancelar" \
-                --fselect $HOME/ 14 48 \
+        dialog	--clear \
+		--title "[Importar CSV]" \
+		--backtitle "$BACKTITLE" \
+		--ok-label "Aceptar" \
+		--cancel-label "Cancelar" \
+		--fselect $HOME/ 14 48
                 2> /tmp/csv-ldif-parser.tmp.$$
         csv_path=`cat /tmp/csv-ldif-parser.tmp.$$`
 }
