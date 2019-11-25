@@ -119,8 +119,7 @@ script_info() {
                         --ok-label "Crear LDIF" \
                         --extra-button \
                         --extra-label "Cancelar" \
-                        --msgbox "$SCRIPT_INFO" 10 40 \
-                        2> /tmp/csv-ldif-parser.tmp.$$
+                        --msgbox "$SCRIPT_INFO" 10 40
                 exit_status=$?
                 # if create ldif is tapped, show a confirmation dialog
                 if [ $exit_status -eq 0 ]
@@ -129,13 +128,16 @@ script_info() {
                                 --title "[Crear Script]" \
                                 --backtitle "$BACKTITLE" \
                                 --yes-label "Segurísimo" \
-                                --yesno "¿Esta seguro de que quiere crear el script?" 10 40 \
-                                2> /tmp/csv-ldif-parser.tmp.$$
+                                --yesno "¿Esta seguro de que quiere crear el script?" 10 40
                         script_option=$?
                         # if confirm equals yes, make the magic ;D
-                        if [ $script_option -eq 1 ]
+                        if [ $script_option -eq 0 ]
                         then
-                                echo crear ldif
+                                csv_to_ldif
+				dialog  --clear \
+					--title "[Script content]" \
+					--backtitle "$BACKTITLE" \
+					--textbox $HOME/add_users.ldif 20 60
                         fi
                 fi
         fi
@@ -160,10 +162,28 @@ script_info_error() {
 
 
 csv_to_ldif() {
-	
-	while IFS=, read -r uid description name
+	#ou exists
+	while IFS=, read -r uidNumber description name
 	do
-		echo
+		echo "dn: uid=$name,ou=prueba,dc=$domain_name,dc=$domain_extension" >> $HOME/add_users.ldif
+		echo uid: $name >> $HOME/add_users.ldif
+		echo cn: $name >> $HOME/add_users.ldif
+		echo givenName: $description >> $HOME/add_users.ldif
+		echo sn: $name >> $HOME/add_users.ldif
+		echo objectClass: inetOrgPerson >> $HOME/add_users.ldif
+		echo objectClass: posixAccount >> $HOME/add_users.ldif
+		echo objectClass: top >> $HOME/add_users.ldif
+		echo loginShell: /bin/bash >> $HOME/add_users.ldif
+		echo uidNumber: $uidNumber >> $HOME/add_users.ldif
+		echo gidNumber: 1 >> $HOME/add_users.ldif
+		echo homeDirectory: /home/$name >> $HOME/add_users.ldif
+		echo userPassword: $(slappasswd -h {SHA} -s "$name") >> $HOME/add_users.ldif
+		echo "" >> $HOME/add_users.ldif
+	done < $csv_path
+	dialog 	--clear \
+		--title "[ldif path]" \
+		--backtitle "$BACKTITLE" \
+		--msgbox "Archivo ldif generado en $HOME/add_users.ldif" 0 0
 }
 
 ou_exists() {
@@ -173,6 +193,10 @@ ou_exists() {
 	ou_content=`cat /tmp/csv-ldif-parser.tmp.$$`
 	if [ -z "$ou_content" ]
 	then
+		return false
+	else
+		return true
+	fi
 }
 
 
