@@ -12,7 +12,10 @@ El programa pedirá al usuario los siguientes parámetros:
 Para poder ejecutar correctamente este script, se necesitará lo siguiente:
   - Un ordenador con terminal ***Linux***
   - Un servidor ***LDAP*** isntalado y correctamente funcionando
-  - Modulo de dialog ```console foo@bar:~$ apt-get install dialog```
+  - Modulo de dialog 
+      ```console
+      foo@bar:~$ apt-get install dialog
+      ```
 
 ### Instalación 
 Primero nos descargamos el script. Este repositorio trae un *.csv* de prueba para poder realizar tests.
