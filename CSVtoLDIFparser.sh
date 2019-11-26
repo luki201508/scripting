@@ -203,7 +203,7 @@ script_info() {
 					--title "[OpenLDAP última entrada]" \
 					--backtitle "$BACKTITLE" \
 					--exit-label "Atrás" \
-					--textbox $temp_file 20 20
+					--textbox $temp_file 40 40
                         fi
                 fi
         fi
@@ -221,7 +221,7 @@ show_ldif_file_info() {
 	printf "\n" >> $temp_file
 	echo "[Segunda entrada del ldif]" >> $temp_file
 	# Mostrar las últimas 13 líneas del archivo
-	tail -13 $HOME/add_users.ldif >> $temp_file
+	tail -14 $HOME/add_users.ldif >> $temp_file
 	printf "\n" >> $temp_file
 	echo "[Numero de entradas totales]" >> $temp_file
 	# Contar todos los saltos de línea del archivo
