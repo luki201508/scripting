@@ -73,7 +73,7 @@ main() {
         exit_case $exit_status
 
 	# Variable usada para determinar la elección del usuario respecto al menu
-        main_val=${cat /tmp/csv-ldif-parser.tmp.$$}
+        main_val=$(cat /tmp/csv-ldif-parser.tmp.$$)
 }
 
 ## Input donde se mete el nombre del admin
@@ -92,7 +92,7 @@ input_admin_name() {
 	# Guardará el valor del input en un archivo temporal
         if [ $exit_status -eq 0 ]
         then
-        	admin_name=${cat /tmp/csv-ldif-parser.tmp.$$}
+        	admin_name=$(cat /tmp/csv-ldif-parser.tmp.$$)
         fi
 }
 
@@ -109,7 +109,7 @@ input_domain_name() {
         exit_status=$?
         if [ $exit_status -eq 0 ]
         then
-        	domain_name=${cat /tmp/csv-ldif-parser.tmp.$$}
+        	domain_name=$(cat /tmp/csv-ldif-parser.tmp.$$)
         fi
 }
 
@@ -126,7 +126,7 @@ input_domain_extension() {
         exit_status=$?
         if [ $exit_status -eq 0 ]
         then
-                domain_extension=${cat /tmp/csv-ldif-parser.tmp.$$}
+                domain_extension=$(cat /tmp/csv-ldif-parser.tmp.$$)
         fi
 }
 
@@ -139,7 +139,7 @@ csv_input() {
 		--cancel-label "Cancelar" \
 		--fselect $HOME/ 14 48 \
                 2> /tmp/csv-ldif-parser.tmp.$$
-        csv_path=${cat /tmp/csv-ldif-parser.tmp.$$}
+        csv_path=$(cat /tmp/csv-ldif-parser.tmp.$$)
 }
 
 ## Mostrará una ventana donde enseñará todos los datos pasados previamente
@@ -203,7 +203,7 @@ script_info() {
 					--title "[OpenLDAP última entrada]" \
 					--backtitle "$BACKTITLE" \
 					--exit-label "Atrás" \
-					--textbox $temp_file 40 50
+					--textbox $temp_file 20 20
                         fi
                 fi
         fi
